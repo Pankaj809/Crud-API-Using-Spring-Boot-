@@ -21,7 +21,7 @@ public class UserController {
     }
 
     // Endpoint to retrieve all users
-    @GetMapping
+    @GetMapping()
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userService.getAllUsers();
         return new ResponseEntity<>(users, HttpStatus.OK);
