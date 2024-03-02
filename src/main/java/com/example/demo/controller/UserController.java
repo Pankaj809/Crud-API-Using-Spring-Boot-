@@ -27,7 +27,7 @@ public class UserController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    // Endpoint to retrieve a user by ID
+    // Endpoint to retrieve a user by ID we can use id to call them through POSTMAN
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
         User user = userService.getUserById(id);
