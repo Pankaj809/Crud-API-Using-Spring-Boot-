@@ -10,8 +10,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 
+
 //It manages interactions with users, such as retrieving user data, creating new users, updating existing users, and deleting users.
+//ResponseEntity is like a package containing the server's response to a client's request.
 @RestController
+
 @RequestMapping("/api/users")
 public class UserController {
 
