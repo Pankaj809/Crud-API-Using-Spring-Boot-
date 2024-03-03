@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
+//It manages interactions with users, such as retrieving user data, creating new users, updating existing users, and deleting users.
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
