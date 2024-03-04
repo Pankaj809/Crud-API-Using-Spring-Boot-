@@ -17,7 +17,10 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    // Method to retrieve all users
+    // Method to retrieve all users getAllUsers():
+    //
+    //This method retrieves all users from the database.
+    //It calls the findAll() method of the UserRepository interface to fetch all users
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
