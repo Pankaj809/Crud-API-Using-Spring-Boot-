@@ -26,6 +26,11 @@ public class UserService {
     }
 
     // Method to retrieve a user by ID
+    //getUserById(Long id):
+    //
+    //This method retrieves a user by their ID from the database.
+    //It calls the findById(id) method of the UserRepository interface to find the user with the specified ID.
+    //If a user with the given ID exists, it returns the user object; otherwise, it returns null.add
     public User getUserById(Long id) {
         return userRepository.findById(id).orElse(null);
     }
