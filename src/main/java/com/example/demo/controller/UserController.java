@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.User;
+import com.example.demo.dto.UserDto;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,12 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
-
-//It manages interactions with users, such as retrieving user data, creating new users, updating existing users, and deleting users.
-//ResponseEntity is like a package containing the server's response to a client's request.
 @RestController
-
 @RequestMapping("/api/users")
 public class UserController {
 
@@ -25,35 +20,36 @@ public class UserController {
         this.userService = userService;
     }
 
-    // Endpoint to retrieve all users
     @GetMapping()
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = userService.getAllUsers();
+    public ResponseEntity<List<UserDto>> getAllUsers() {
+        List<UserDto> users = userService.getAllUsers();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    // Endpoint to retrieve a user by ID we can use id to call them through POSTMAN
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        User user = userService.getUserById(id);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+    public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
+        UserDto user = userService.getUserById(id);
+        if (user != null) {
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    // Endpoint to create a new user
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        User createdUser = userService.createUser(user);
+    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
+        UserDto createdUser = userService.createUser(userDto);
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
 
-    // Endpoint to update an existing user
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
-        User updatedUserInfo = userService.updateUser(id, updatedUser);
-        return new ResponseEntity<>(updatedUserInfo, HttpStatus.OK);
+    public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @RequestBody UserDto updatedUserDto) {
+        UserDto updatedUser = userService.updateUser(id, updatedUserDto);
+        if (updatedUser != null) {
+            return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    // Endpoint to delete a user by ID
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
