@@ -1,55 +1,56 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.UserDto;
+import com.example.demo.Mapper.UserMapper;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
+        this.userMapper = userMapper;
     }
 
-    // Method to retrieve all users getAllUsers():
-    //
-    //This method retrieves all users from the database.
-    //It calls the findAll() method of the UserRepository interface to fetch all users
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserDto> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        return users.stream().map(userMapper::toDto).collect(Collectors.toList());
     }
 
-    // Method to retrieve a user by ID
-    //getUserById(Long id):
-    //
-    //This method retrieves a user by their ID from the database.
-    //It calls the findById(id) method of the UserRepository interface to find the user with the specified ID.
-    //If a user with the given ID exists, it returns the user object; otherwise, it returns null.add
-    public User getUserById(Long id) {
-        return userRepository.findById(id).orElse(null);
+    public UserDto getUserById(Long id) {
+        User user = userRepository.findById(id).orElse(null);
+        if (user != null) {
+            return userMapper.toDto(user);
+        }
+        return null;
     }
 
-    // Method to create a new user
-    public User createUser(User user) {
-        return userRepository.save(user);
+    public UserDto createUser(UserDto userDto) {
+        User user = userMapper.toEntity(userDto);
+        user = userRepository.save(user);
+        return userMapper.toDto(user);
     }
 
-    // Method to update an existing user
-    public User updateUser(Long id, User updatedUser) {
+    public UserDto updateUser(Long id, UserDto updatedUserDto) {
         if (userRepository.existsById(id)) {
+            User updatedUser = userMapper.toEntity(updatedUserDto);
             updatedUser.setId(id);
-            return userRepository.save(updatedUser);
+            updatedUser = userRepository.save(updatedUser);
+            return userMapper.toDto(updatedUser);
         }
         return null; // Return null if user with given ID doesn't exist
     }
 
-    // Method to delete a user by ID
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
